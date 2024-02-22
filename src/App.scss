@@ -1,0 +1,21 @@
+@import "./var.scss";
+
+#root {
+	background: radial-gradient(58vw 77vh at 40% 100%, transparent 40%, rgba($color2, 7%), transparent 60%),
+		linear-gradient(45deg, transparent 54%, rgba($color2, 7%), transparent 62%),
+		linear-gradient(-45deg, transparent 63%, rgba($color2, 7%), transparent 71%);
+	height: 100vh;
+	display: flex;
+	flex-direction: column;
+}
+
+.main {
+	flex: 1;
+	padding: 20px 12px;
+
+	&__search-msg {
+		font-size: 1.2rem;
+		margin-bottom: 1em;
+		color: rgba(white, 0.7);
+	}
+}

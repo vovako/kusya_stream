@@ -1,0 +1,20 @@
+@import '../../var.scss';
+
+.header {
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	padding: 8px 12px;
+}
+.logo {
+	font-size: 27px;
+	color: $color1;
+	font-family: 'Aquarelle';
+}
+.menu-btn {
+	display: flex;
+	place-items: center;
+	img {
+		width: 30px;
+	}
+}

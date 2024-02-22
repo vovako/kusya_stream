@@ -1,0 +1,73 @@
+@import "../../var.scss";
+
+.player {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	gap: 20px;
+	padding: 10px 12px;
+	&__state-btn {
+		background-color: $color2;
+		width: 30px;
+		aspect-ratio: 1;
+		border-radius: 6px;
+	}
+
+	&__volume-input {
+		appearance: slider-vertical;
+		accent-color: $color2;
+		height: 70px;
+		width: 8px;
+	}
+
+	&__body {
+	}
+}
+
+.player-body {
+	display: flex;
+	flex-direction: column;
+	height: 100%;
+	&__title {
+
+	}
+	&__author {
+		flex: 1;
+	}
+	&__row {
+		display: flex;
+		align-items: center;
+		gap: 7px;
+	}
+	&__radio-title {
+
+	}
+	&__favorite-btn {
+		display: flex;
+		align-items: center;
+		img {
+			height: 1.3em;
+		}
+	}
+}
+
+.pause-btn {
+	display: flex;
+	padding: 5px;
+	&::before {
+		content: "";
+		width: 100%;
+		height: 100%;
+		background: url("../../assets/pause.svg") center / contain no-repeat;
+	}
+}
+.play-btn {
+	display: flex;
+	padding: 5px;
+	&::before {
+		content: "";
+		width: 100%;
+		height: 100%;
+		background: url("../../assets/play.svg") center / contain no-repeat;
+	}
+}
