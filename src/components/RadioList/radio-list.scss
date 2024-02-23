@@ -5,7 +5,18 @@
 	flex-direction: column;
 	gap: 6px;
 	overflow-y: scroll;
-	height: 100%;
+	flex: 1 1 auto;
+	height: 0;
+	padding-right: 4px;
+	&::-webkit-scrollbar {
+		width: 4px;
+	}
+	&::-webkit-scrollbar-track {
+		background-color: rgba($color1, 0.1);
+	}
+	&::-webkit-scrollbar-thumb {
+		background-color: rgba($color1, 0.6);
+	}
 }
 .radio-item {
 	background-color: rgba($color1, 5%);
@@ -16,6 +27,7 @@
 		display: flex;
 		padding: 10px;
 		padding-right: 20px;
+		align-items: flex-start;
 		justify-content: space-between;
 	}
 	&__image {
@@ -32,5 +44,6 @@
 		font-size: 1.2rem;
 	}
 	&__favorite-btn {
+		align-self: center;
 	}
 }
