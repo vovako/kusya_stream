@@ -1,0 +1,36 @@
+@import "/src/var.scss";
+
+.search {
+	border: $color1;
+	display: flex;
+	align-items: center;
+	border: solid 1px $color1;
+	border-radius: 999px;
+	overflow: hidden;
+	&__input {
+		flex: 1;
+		line-height: 2;
+		background-color: transparent;
+		border: 0;
+		padding: 0 15px;
+		font-size: 1.3rem;
+		outline: none;
+		color: $color1;
+		&::placeholder {
+			color: rgba($color1, 0.7);
+		}
+	}
+	&__submit-btn {
+		background-color: $color1;
+		padding: 3px 8px;
+		align-self: stretch;
+		display: block;
+		svg {
+			height: 1.6em;
+
+			path {
+				fill: $bg-color;
+			}
+		}
+	}
+}
