@@ -26,7 +26,8 @@
 	}
 
 	&__search {
-
+		position: relative;
+		
 		.menu-dialog-item {
 			&.invisible {
 				visibility: hidden;
@@ -35,8 +36,13 @@
 
 		.search {
 			position: absolute;
-			right: 30px;
-			left: 30px;
+			top: 0;
+			left: calc(50% - 50vw + 20px);
+			right: calc(50% - 50vw + 20px);
+
+			&.invisible {
+				visibility: hidden;
+			}
 		}
 	}
 }
