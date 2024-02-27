@@ -16,6 +16,20 @@ export default function App() {
 		name: null,
 		favorites: []
 	})
+	const radioList = [
+		{
+			id: 1,
+			title: 'Русская Волна',
+			media: 'https://rp.amgradio.ru/RuWave48',
+			image: 'https://radiopotok.ru/f/station/512/1543.png'
+		},
+		{
+			id: 2,
+			title: 'Русское радио',
+			media: 'https://rusradio.hostingradio.ru/rusradio128.mp3',
+			image: 'https://radiopotok.ru/f/station_webp/512/85.webp'
+		},
+	]
 
 	function toggleDialog(ref) {
 		if (!ref.current) return;
@@ -41,7 +55,7 @@ export default function App() {
 					<div className="main__search-msg">
 						Ничего не найдено по запросу “Радио energy”
 					</div>
-					<RadioList />
+					<RadioList radioArray={radioList} />
 				</div>
 			</main>
 			<Player />
