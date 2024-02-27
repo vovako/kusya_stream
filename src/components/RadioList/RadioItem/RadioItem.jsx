@@ -3,10 +3,12 @@ import './radio-item.scss'
 import idleFavor from '../../../assets/idle-favor.svg'
 import addToFavor from '../../../assets/favor.svg'
 
-export default function RadioItem({ isFavorite, image, title, isPlaying, setIsPlaying }) {
+export default function RadioItem({ id, isFavorite, image, title, isPlaying, setPlayingId }) {
 	function onClickItem(evt) {
-		if (!evt.target.classList.contains('radio-item__favorite-btn')) return
-		setIsPlaying(!isPlaying)
+		if (evt.target.classList.contains('radio-item__favorite-btn')) {
+			return
+		}
+		if (!isPlaying) setPlayingId(id);
 	}
 
 	return (

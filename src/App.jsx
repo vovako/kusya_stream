@@ -1,4 +1,4 @@
-import { useRef, useState } from 'react'
+import { useMemo, useRef, useState } from 'react'
 import './App.scss'
 import Header from './components/Header/Header'
 import Player from './components/Player/Player'
@@ -7,15 +7,6 @@ import MobileMenu from './components/MobileMenu/MobileMenu'
 import { LoginModal } from './components/Modal/Modal'
 
 export default function App() {
-	const mobileMenuRef = useRef(null);
-	const loginModalRef = useRef(null);
-	const regModalRef = useRef(null);
-	const [loginTitle, setLoginTitle] = useState(null)
-	const [searchValue, setSearchValue] = useState('')
-	const [userInfo, setUserInfo] = useState({
-		name: null,
-		favorites: []
-	})
 	const radioList = [
 		{
 			id: 1,
@@ -30,6 +21,33 @@ export default function App() {
 			image: 'https://radiopotok.ru/f/station_webp/512/85.webp'
 		},
 	]
+
+
+	const mobileMenuRef = useRef(null);
+	const loginModalRef = useRef(null);
+	const regModalRef = useRef(null);
+
+	const [loginTitle, setLoginTitle] = useState(null)
+	const [searchValue, setSearchValue] = useState('')
+	const [userInfo, setUserInfo] = useState({
+		name: null,
+		favorites: []
+	})
+	const [playingId, setPlayingId] = useState(radioList[0].id)
+	const [soundInfo, setSoundInfo] = useState()
+
+	const getSoundInfo = useMemo(async (id) => {
+		// const resp = await fetch('')
+		// return resp.json()
+		const info = {
+			soundName: 'Яблоки на снегу',
+			author: 'Николай Баскет',
+			radioName: radioList.filter(r => r.id === id),
+		}
+		console.log(info);
+		setSoundInfo(info)
+	}, [playingId])
+
 
 	function toggleDialog(ref) {
 		if (!ref.current) return;
@@ -55,7 +73,7 @@ export default function App() {
 					<div className="main__search-msg">
 						Ничего не найдено по запросу “Радио energy”
 					</div>
-					<RadioList radioArray={radioList} />
+					<RadioList radioArray={radioList} playingId={playingId} setPlayingId={setPlayingId} getSoundInfo={getSoundInfo} />
 				</div>
 			</main>
 			<Player />
