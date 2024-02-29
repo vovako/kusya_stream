@@ -8,7 +8,7 @@ import arrowIcon from '/src/assets/arrow-bottom.svg'
 import crossIcon from '/src/assets/cross.svg'
 import './mobile-menu.scss'
 
-const MobileMenu = forwardRef(({ toggleDialog, searchValue, setSearchValue, userName, onClickLoginBtn, onClickFavoritListBtn }, ref) => {
+const MobileMenu = forwardRef(({ toggleDialog, searchValue, setSearchValue, userName, onClickLoginBtn, onClickFavoritListBtn, setSearchDescr }, ref) => {
 	const [searchIsActive, setSearchIsActive] = useState(false)
 	const [userDetailsIsActive, setUserDetailsIsActive] = useState(false)
 
@@ -19,11 +19,15 @@ const MobileMenu = forwardRef(({ toggleDialog, searchValue, setSearchValue, user
 		setUserDetailsIsActive(false)
 	}
 
-	function onCloseMenu() {
+	function closeMenu() {
 		toggleDialog()
 		setSearchIsActive(false)
 		setUserDetailsIsActive(false)
 		setSearchValue('')
+	}
+
+	function onCloseMenu() {
+		closeMenu()
 	}
 
 	function onClickSearchBtn() {
@@ -31,9 +35,19 @@ const MobileMenu = forwardRef(({ toggleDialog, searchValue, setSearchValue, user
 		setUserDetailsIsActive(false)
 	}
 
+	function onSubmitSearch() {
+		setSearchDescr(searchValue)
+		closeMenu()
+	}
+
 	function onClickUserDetails() {
 		setSearchIsActive(false)
 		setUserDetailsIsActive(!userDetailsIsActive)
+	}
+
+	function onClickMain() {
+		setSearchDescr('')
+		closeMenu()
 	}
 
 	return (
@@ -73,7 +87,7 @@ const MobileMenu = forwardRef(({ toggleDialog, searchValue, setSearchValue, user
 					</div>
 					<div className="menu-dialog-item__title">Избранное</div>
 				</button>
-				<button className="menu-dialog-item">
+				<button onClick={onClickMain} className="menu-dialog-item">
 					<div className="menu-dialog-item__image">
 						<img src={mainIcon} alt="" />
 					</div>
@@ -86,7 +100,7 @@ const MobileMenu = forwardRef(({ toggleDialog, searchValue, setSearchValue, user
 						</div>
 						<div className="menu-dialog-item__title">Поиск радио</div>
 					</button>
-					<Search value={searchValue} setValue={setSearchValue} isActive={searchIsActive} />
+					<Search value={searchValue} setValue={setSearchValue} isActive={searchIsActive} onSubmitSearch={onSubmitSearch} />
 				</div>
 			</div>
 		</dialog>

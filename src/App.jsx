@@ -1,4 +1,4 @@
-import { useMemo, useRef, useState } from 'react'
+import { useEffect, useMemo, useRef, useState } from 'react'
 import './App.scss'
 import Header from './components/Header/Header'
 import Player from './components/Player/Player'
@@ -11,42 +11,121 @@ export default function App() {
 		{
 			id: 1,
 			title: 'Русская Волна',
-			media: 'https://rp.amgradio.ru/RuWave48',
+			audio: 'https://rp.amgradio.ru/RuWave48',
 			image: 'https://radiopotok.ru/f/station/512/1543.png'
 		},
 		{
 			id: 2,
 			title: 'Русское радио',
-			media: 'https://rusradio.hostingradio.ru/rusradio128.mp3',
+			audio: 'https://rusradio.hostingradio.ru/rusradio128.mp3',
 			image: 'https://radiopotok.ru/f/station_webp/512/85.webp'
 		},
+		{
+			id: 3,
+			title: 'ENERGY (Энерджи)',
+			audio: 'https://pub0201.101.ru/stream/air/aac/64/99',
+			image: 'https://radiopotok.ru/f/station_webp/512/4.webp'
+		},
+		{
+			id: 4,
+			title: 'ТНТ MUSIC RADIO',
+			audio: 'https://tntradio.hostingradio.ru:8027/tntradio128.mp3',
+			image: 'https://radiopotok.ru/f/station_webp/512/1218.webp'
+		},
+		{
+			id: 5,
+			title: 'Радио TOP 100',
+			audio: 'https://ic2.radiosignal.one/top100',
+			image: 'https://radiopotok.ru/f/station_webp/512/1992.webp'
+		},
+		{
+			id: 6,
+			title: 'Русский Шторм',
+			audio: 'https://live.rushtorm.pro:8000/128',
+			image: 'https://radiopotok.ru/f/station_webp/512/2360.webp'
+		},
+		{
+			id: 7,
+			title: 'Маруся ФМ',
+			audio: 'https://radio-holding.ru:9433/marusya_default',
+			image: 'https://radiopotok.ru/f/station_webp/512/1323.webp'
+		},
+		{
+			id: 8,
+			title: 'Remix FM',
+			audio: 'https://rmx.amgradio.ru/RemixFM',
+			image: 'https://radiopotok.ru/f/station_webp/512/1901.webp'
+		},
+		{
+			id: 9,
+			title: 'екорд / Record',
+			audio: 'https://radiorecord.hostingradio.ru/rr_main96.aacp',
+			image: 'https://radiopotok.ru/f/station_webp/512/67.webp'
+		},
+		{
+			id: 10,
+			title: 'РУССКОЕ FM',
+			audio: 'https://rufm.amgradio.ru/rufm',
+			image: 'https://radiopotok.ru/f/station_webp/512/1175.webp'
+		},
 	]
-
 
 	const mobileMenuRef = useRef(null);
 	const loginModalRef = useRef(null);
 	const regModalRef = useRef(null);
+	const audioRef = useRef(null)
 
 	const [loginTitle, setLoginTitle] = useState(null)
 	const [searchValue, setSearchValue] = useState('')
+	const [searcDescr, setSearchDescr] = useState('')
+	const [isPause, setIsPause] = useState(true)
+	const [volume, setVolume] = useState(0.5);
+	
+	const [playingId, setPlayingId] = useState(null)
+	const [radioName, setRadioName] = useState(null)
+	const [soundName, setSoundName] = useState('')
+	const [soundAuthor, setSoundAuthor] = useState('')
+
 	const [userInfo, setUserInfo] = useState({
 		name: null,
 		favorites: []
 	})
-	const [playingId, setPlayingId] = useState(radioList[0].id)
-	const [soundInfo, setSoundInfo] = useState()
 
-	const getSoundInfo = useMemo(async (id) => {
-		// const resp = await fetch('')
-		// return resp.json()
-		const info = {
-			soundName: 'Яблоки на снегу',
-			author: 'Николай Баскет',
-			radioName: radioList.filter(r => r.id === id),
+	// const onSelectRadio = useMemo(async () => {
+	// 	// const resp = await fetch('')
+	// 	// return resp.json()
+	// 	if (soundInfo !== null) {
+	// 		soundInfo.audio.pause()
+	// 	}
+
+	// 	const radio = radioList.filter(r => r.id === playingId)[0]
+	// 	const info = {
+	// 		soundName: 'Яблоки на снегу',
+	// 		author: 'Николай Баскет',
+	// 		radioName: radio.title,
+	// 		audio: new Audio(radio.audio)
+	// 	}
+	// 	setSoundInfo(info)
+	// }, [playingId])
+
+	useEffect(() => {
+		if (playingId === null || !audioRef.current) return;
+
+		const radioItem = radioList.filter(r => r.id === playingId)[0]
+
+		setRadioName(radioItem.title)
+
+		audioRef.current.src = radioItem.audio
+		if (!isPause) {
+			audioRef.current.load()
+			audioRef.current.play()
 		}
-		console.log(info);
-		setSoundInfo(info)
+		
 	}, [playingId])
+
+	useEffect(() => {
+		audioRef.current.volume = volume
+	}, [volume])
 
 
 	function toggleDialog(ref) {
@@ -65,22 +144,27 @@ export default function App() {
 		toggleDialog(loginModalRef)
 	}
 
+	function onClickPlayPauseBtn() {
+		isPause ? audioRef.current.play() : audioRef.current.pause()
+		setIsPause(!isPause);
+	}
+
 	return (
 		<>
 			<Header onMenuClick={() => toggleDialog(mobileMenuRef)} />
 			<main className="main">
 				<div className="main__body">
-					<div className="main__search-msg">
-						Ничего не найдено по запросу “Радио energy”
-					</div>
-					<RadioList radioArray={radioList} playingId={playingId} setPlayingId={setPlayingId} getSoundInfo={getSoundInfo} />
+					<div className="main__search-msg">{searcDescr}</div>
+					<RadioList radioArray={radioList} playingId={playingId} setPlayingId={setPlayingId} />
 				</div>
 			</main>
-			<Player />
+			<Player isPause={isPause} onClickPlayPauseBtn={onClickPlayPauseBtn} radioName={radioName} soundAuthor={soundAuthor} soundName={soundName} setVolume={setVolume} volume={volume} />
+			<audio ref={audioRef} src=""></audio>
 			<MobileMenu ref={mobileMenuRef}
 				toggleDialog={() => toggleDialog(mobileMenuRef)}
 				searchValue={searchValue}
 				setSearchValue={setSearchValue}
+				setSearchDescr={setSearchDescr}
 				userName={userInfo.name}
 				onClickLoginBtn={onClickLoginBtn}
 				onClickFavoritListBtn={onClickFavoritListBtn} />

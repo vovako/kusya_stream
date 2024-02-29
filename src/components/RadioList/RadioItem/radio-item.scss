@@ -4,6 +4,7 @@
 	background-color: rgba($color1, 5%);
 	backdrop-filter: blur(20px);
 	display: flex;
+	cursor: pointer;
 
 	&.active {
 		background-color: rgba($color1, 25%);
