@@ -6,11 +6,21 @@
 	<link rel="icon" type="image/svg+xml" href="/logo.svg" />
 	<meta name="viewport" content="width=device-width, initial-scale=1.0" />
 	<title>Куся Эфир</title>
+	<script src="https://unpkg.com/@vkid/sdk@latest/dist-sdk/umd/index.js"></script>
 </head>
 
 <body>
 	<div id="root"></div>
 	<script type="module" src="/src/main.jsx"></script>
+	<script>
+		const VKID = window.VKIDSDK;
+		const APP_ID = 51868424
+		const REDIRECT_URL = 'https://rnxfx-94-41-185-67.a.free.pinggy.online'
+		VKID.Config.set({
+			app: APP_ID, // Идентификатор приложения.
+			redirectUrl: REDIRECT_URL, // Адрес для перехода после авторизации.
+		});
+	</script>
 </body>
 
 </html>

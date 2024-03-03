@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useRef, useState } from 'react'
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import './App.scss'
 import Header from './components/Header/Header'
 import Player from './components/Player/Player'
@@ -80,7 +80,7 @@ export default function App() {
 	const [searcDescr, setSearchDescr] = useState('')
 	const [isPause, setIsPause] = useState(true)
 	const [volume, setVolume] = useState(0.5);
-	
+
 	const [playingId, setPlayingId] = useState(null)
 	const [radioName, setRadioName] = useState(null)
 	const [soundName, setSoundName] = useState('')
@@ -116,16 +116,31 @@ export default function App() {
 		setRadioName(radioItem.title)
 
 		audioRef.current.src = radioItem.audio
-		if (!isPause) {
-			audioRef.current.load()
-			audioRef.current.play()
-		}
-		
+		audioRef.current.load()
+		audioRef.current.play()
+		setIsPause(false)
+
 	}, [playingId])
 
 	useEffect(() => {
 		audioRef.current.volume = volume
 	}, [volume])
+
+	//test query
+	useCallback(() => {
+		fetch('http://localhost:3000/users/login', {
+			method: 'post',
+			headers: {
+				'Content-Type': 'application/json'
+			},
+			body: JSON.stringify({
+				email: 'textemail@mail.ru',
+				password: '12345pass'
+			})
+		})
+			.then(res => res.json())
+			.then(json => console.log(json))
+	})
 
 
 	function toggleDialog(ref) {
