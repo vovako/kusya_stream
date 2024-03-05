@@ -22,9 +22,10 @@ export default Modal;
 
 
 
-export function LoginModal({ modalRef, regModalRef, toggleDialog, title = null }) {
+export function LoginModal({ modalRef, regModalRef, toggleDialog, title, setUserName, setFavorites, apiOrigin }) {
 	const [loginValue, setLoginValue] = useState('')
 	const [passwordValue, setPasswordValue] = useState('')
+	const [notice, setNotice] = useState('')
 
 	function close() {
 		toggleDialog(modalRef)
@@ -43,6 +44,40 @@ export function LoginModal({ modalRef, regModalRef, toggleDialog, title = null }
 		console.log('in dev');
 	}
 
+	function onClickAuth() {
+		if (loginValue === '' && passwordValue === '') return
+
+		fetch(`${apiOrigin}/users/login`, {
+			method: 'post',
+			headers: {
+				'Content-Type': 'application/json'
+			},
+			body: JSON.stringify({
+				email: loginValue.trim(),
+				password: passwordValue.trim()
+			})
+		})
+			.then(res => res.json())
+			.then(json => {
+				console.log(json)
+				if (json.error !== null) {
+					setNotice(json.error)
+					return
+				}
+
+				setNotice('')
+				setUserName(json.data.login)
+				setFavorites(JSON.parse(json.data.favorites_list))
+				close()
+
+				localStorage.setItem('user_name', json.data.login)
+				localStorage.setItem('favorites', json.data.favorites_list)
+				localStorage.setItem('user_id', json.data.id)
+			})
+	}
+
+
+
 	return (
 		<>
 			<Modal ref={modalRef} toggleDialog={close} >
@@ -52,9 +87,9 @@ export function LoginModal({ modalRef, regModalRef, toggleDialog, title = null }
 					<input value={passwordValue} onChange={(evt) => setPasswordValue(evt.target.value)} type="password" placeholder='пароль' className="login__input input" />
 					<div className="login__buttons">
 						<button onClick={onClickRegBtn} className="link-btn">Регистрация</button>
-						<button className="btn">Войти</button>
+						<button onClick={onClickAuth} className="btn">Войти</button>
 					</div>
-					<div className="login__notice">Неправильная почта или пароль</div>
+					<div className="login__notice">{notice}</div>
 					<div className="login__other-ways">
 						<button onClick={onClickAuthFromVK} id="VKIDSDKAuthButton" className="VkIdWebSdk__button VkIdWebSdk__button_reset">
 							<div className="VkIdWebSdk__button_container">

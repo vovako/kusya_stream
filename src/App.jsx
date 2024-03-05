@@ -70,6 +70,8 @@ export default function App() {
 		},
 	]
 
+	const apiOrigin = 'http://localhost:3000'
+
 	const mobileMenuRef = useRef(null);
 	const loginModalRef = useRef(null);
 	const regModalRef = useRef(null);
@@ -86,27 +88,17 @@ export default function App() {
 	const [soundName, setSoundName] = useState('')
 	const [soundAuthor, setSoundAuthor] = useState('')
 
-	const [userInfo, setUserInfo] = useState({
-		name: null,
-		favorites: []
-	})
+	const [userName, setUserName] = useState(null)
+	const [favorites, setFavorites] = useState([])
 
-	// const onSelectRadio = useMemo(async () => {
-	// 	// const resp = await fetch('')
-	// 	// return resp.json()
-	// 	if (soundInfo !== null) {
-	// 		soundInfo.audio.pause()
-	// 	}
+	useEffect(() => {
+		const name = localStorage.getItem('user_name')
+		const favor = localStorage.getItem('favorites')
+		if (name === null || favor === null) return
 
-	// 	const radio = radioList.filter(r => r.id === playingId)[0]
-	// 	const info = {
-	// 		soundName: 'Яблоки на снегу',
-	// 		author: 'Николай Баскет',
-	// 		radioName: radio.title,
-	// 		audio: new Audio(radio.audio)
-	// 	}
-	// 	setSoundInfo(info)
-	// }, [playingId])
+		setUserName(name)
+		setFavorites(JSON.parse(favor))
+	}, [])
 
 	useEffect(() => {
 		if (playingId === null || !audioRef.current) return;
@@ -126,21 +118,29 @@ export default function App() {
 		audioRef.current.volume = volume
 	}, [volume])
 
-	//test query
-	useCallback(() => {
-		fetch('http://localhost:3000/users/login', {
+	function updateFavoritesInDB(radioId) {
+		if (userName === null) {
+			onClickFavoritListBtn()
+			return
+		}
+
+		const favor = new Set(favorites)
+		favor.has(radioId) ? favor.delete(radioId) : favor.add(radioId)
+		const newFavor = Array.from(favor)
+		setFavorites(newFavor)
+		localStorage.setItem('favorites', JSON.stringify(newFavor))
+
+		fetch(`${apiOrigin}/users/setFavorites`, {
 			method: 'post',
 			headers: {
 				'Content-Type': 'application/json'
 			},
 			body: JSON.stringify({
-				email: 'textemail@mail.ru',
-				password: '12345pass'
+				favorites: JSON.stringify(newFavor),
+				id: +localStorage.getItem('user_id')
 			})
 		})
-			.then(res => res.json())
-			.then(json => console.log(json))
-	})
+	}
 
 
 	function toggleDialog(ref) {
@@ -164,29 +164,49 @@ export default function App() {
 		setIsPause(!isPause);
 	}
 
+	function onClickExitUser() {
+		localStorage.removeItem('user_name')
+		localStorage.removeItem('favorites')
+		localStorage.removeItem('user_id')
+		setUserName(null)
+		setFavorites([])
+	}
+
 	return (
 		<>
 			<Header onMenuClick={() => toggleDialog(mobileMenuRef)} />
 			<main className="main">
 				<div className="main__body">
 					<div className="main__search-msg">{searcDescr}</div>
-					<RadioList radioArray={radioList} playingId={playingId} setPlayingId={setPlayingId} />
+					<RadioList radioArray={radioList} playingId={playingId} setPlayingId={setPlayingId} favorites={favorites} updateFavoritesInDB={updateFavoritesInDB} />
 				</div>
 			</main>
-			<Player isPause={isPause} onClickPlayPauseBtn={onClickPlayPauseBtn} radioName={radioName} soundAuthor={soundAuthor} soundName={soundName} setVolume={setVolume} volume={volume} />
+			<Player isPause={isPause}
+				onClickPlayPauseBtn={onClickPlayPauseBtn}
+				radioName={radioName}
+				soundAuthor={soundAuthor}
+				soundName={soundName}
+				setVolume={setVolume}
+				isFavorite={favorites.includes(playingId)}
+				volume={volume}
+				onClickToggleFavorite={() => updateFavoritesInDB(playingId)} />
 			<audio ref={audioRef} src=""></audio>
 			<MobileMenu ref={mobileMenuRef}
 				toggleDialog={() => toggleDialog(mobileMenuRef)}
 				searchValue={searchValue}
 				setSearchValue={setSearchValue}
 				setSearchDescr={setSearchDescr}
-				userName={userInfo.name}
+				userName={userName}
 				onClickLoginBtn={onClickLoginBtn}
-				onClickFavoritListBtn={onClickFavoritListBtn} />
+				onClickFavoritListBtn={onClickFavoritListBtn}
+				onClickExitUser={onClickExitUser} />
 			<LoginModal title={loginTitle}
 				modalRef={loginModalRef}
 				regModalRef={regModalRef}
-				toggleDialog={toggleDialog} />
+				toggleDialog={toggleDialog}
+				setUserName={setUserName}
+				setFavorites={setFavorites}
+				apiOrigin={apiOrigin} />
 		</>
 	)
 }

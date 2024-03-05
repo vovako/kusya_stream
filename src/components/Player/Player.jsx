@@ -3,7 +3,7 @@ import './player.scss'
 import idleFavor from '../../assets/idle-favor.svg'
 import addToFavor from '../../assets/favor.svg'
 
-export default function Player({ isPause, onClickPlayPauseBtn, radioName, soundAuthor, soundName, volume, setVolume, isFavorite = false }) {
+export default function Player({ isPause, onClickPlayPauseBtn, radioName, soundAuthor, soundName, volume, setVolume, isFavorite, onClickToggleFavorite }) {
 	return (
 		<div className="player">
 			<button onClick={onClickPlayPauseBtn} className={`player__state-btn ${isPause ? 'play-btn' : 'pause-btn'}`}></button>
@@ -16,12 +16,12 @@ export default function Player({ isPause, onClickPlayPauseBtn, radioName, soundA
 				<div className="player-body__row">
 					<div className="player-body__radio-title">{radioName}</div>
 					{radioName !== null && isFavorite && (
-						<button className="player-body__favorite-btn remove-from-favorite">
+						<button onClick={onClickToggleFavorite} className="player-body__favorite-btn remove-from-favorite">
 							<img src={addToFavor} alt="" />
 						</button>
 					)}
 					{radioName !== null && !isFavorite && (
-						<button className="player-body__favorite-btn add-to-favorite">
+						<button onClick={onClickToggleFavorite} className="player-body__favorite-btn add-to-favorite">
 							<img src={idleFavor} alt="" />
 						</button>
 					)}

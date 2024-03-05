@@ -8,7 +8,7 @@ import arrowIcon from '/src/assets/arrow-bottom.svg'
 import crossIcon from '/src/assets/cross.svg'
 import './mobile-menu.scss'
 
-const MobileMenu = forwardRef(({ toggleDialog, searchValue, setSearchValue, userName, onClickLoginBtn, onClickFavoritListBtn, setSearchDescr }, ref) => {
+const MobileMenu = forwardRef(({ toggleDialog, searchValue, setSearchValue, userName, onClickLoginBtn, onClickFavoritListBtn, setSearchDescr, onClickExitUser }, ref) => {
 	const [searchIsActive, setSearchIsActive] = useState(false)
 	const [userDetailsIsActive, setUserDetailsIsActive] = useState(false)
 
@@ -50,6 +50,11 @@ const MobileMenu = forwardRef(({ toggleDialog, searchValue, setSearchValue, user
 		closeMenu()
 	}
 
+	function onClickExit() {
+		onClickExitUser()
+		setUserDetailsIsActive(false)
+	}
+
 	return (
 		<dialog ref={ref} className='menu-dialog' onClick={backdropHandler}>
 			<button onClick={onCloseMenu} className='menu-dialog__close-btn'>
@@ -76,7 +81,7 @@ const MobileMenu = forwardRef(({ toggleDialog, searchValue, setSearchValue, user
 								<img src={arrowIcon} alt="" />
 							</button>
 							<div className="user-details__list">
-								<button className="user-details__item">Выйти</button>
+								<button onClick={onClickExit} className="user-details__item">Выйти</button>
 							</div>
 						</div>
 					</div>
