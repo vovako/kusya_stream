@@ -22,6 +22,10 @@
 
 	&__body {
 	}
+
+	@media (min-width: $desktop + px) {
+		display: none;
+	}
 }
 
 .player-body {
@@ -29,7 +33,6 @@
 	flex-direction: column;
 	height: 100%;
 	&__title {
-
 	}
 	&__author {
 		flex: 1;
@@ -40,7 +43,6 @@
 		gap: 7px;
 	}
 	&__radio-title {
-
 	}
 	&__favorite-btn {
 		display: flex;

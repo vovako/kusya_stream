@@ -1,0 +1,45 @@
+@import "../../var.scss";
+
+.header {
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	padding: 8px 12px;
+
+	.player {
+		display: none;
+		@media (min-width: $desktop + px) {
+			display: flex;
+		}
+	}
+
+	.user-details {
+		display: none;
+		@media (min-width: $desktop + px) {
+			display: block;
+		}
+	}
+
+	@media (min-width: $desktop + px) {
+		padding: 12px 30px;
+	}
+}
+.logo {
+	font-size: 27px;
+	color: $color1;
+	font-family: "Aquarelle";
+	@media (min-width: $desktop + px) {
+		font-size: 40px;
+	}
+}
+.menu-btn {
+	display: flex;
+	place-items: center;
+	img {
+		width: 30px;
+	}
+
+	@media (min-width: $desktop + px) {
+		display: none;
+	}
+}

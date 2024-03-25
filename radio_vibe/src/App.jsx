@@ -1,10 +1,12 @@
-import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import './App.scss'
 import Header from './components/Header/Header'
 import Player from './components/Player/Player'
 import RadioList from './components/RadioList/RadioList'
 import MobileMenu from './components/MobileMenu/MobileMenu'
 import { LoginModal } from './components/Modal/Modal'
+import Sidebar from './components/Sidebar/Sidebar'
+import UserDetails from './components/UserDetails/UserDetails'
 
 export default function App() {
 	const radioList = [
@@ -85,11 +87,13 @@ export default function App() {
 
 	const [playingId, setPlayingId] = useState(null)
 	const [radioName, setRadioName] = useState(null)
-	const [soundName, setSoundName] = useState('')
-	const [soundAuthor, setSoundAuthor] = useState('')
+	const [soundName, setSoundName] = useState('Полное название текущего трека')
+	const [soundAuthor, setSoundAuthor] = useState('Исполнитель')
 
 	const [userName, setUserName] = useState(null)
 	const [favorites, setFavorites] = useState([])
+
+	const [userDetailsIsActive, setUserDetailsIsActive] = useState(false)
 
 	useEffect(() => {
 		const name = localStorage.getItem('user_name')
@@ -174,8 +178,26 @@ export default function App() {
 
 	return (
 		<>
-			<Header onMenuClick={() => toggleDialog(mobileMenuRef)} />
+			<Header onMenuClick={() => toggleDialog(mobileMenuRef)}>
+				<Player isPause={isPause}
+					onClickPlayPauseBtn={onClickPlayPauseBtn}
+					radioName={radioName}
+					soundAuthor={soundAuthor}
+					soundName={soundName}
+					setVolume={setVolume}
+					isFavorite={favorites.includes(playingId)}
+					volume={volume}
+					onClickToggleFavorite={() => updateFavoritesInDB(playingId)} />
+				<div className="user-details">
+					<UserDetails userName={userName}
+						onClickExit={onClickExitUser}
+						onClickUserDetails={() => setUserDetailsIsActive(false)}
+						userDetailsIsActive={userDetailsIsActive}
+						onClickLoginBtn={onClickLoginBtn} />
+				</div>
+			</Header>
 			<main className="main">
+				<Sidebar searchValue={searchValue} setSearchValue={setSearchValue} setSearchDescr={setSearchDescr} onClickFavoritListBtn={onClickFavoritListBtn} />
 				<div className="main__body">
 					<div className="main__search-msg">{searcDescr}</div>
 					<RadioList radioArray={radioList} playingId={playingId} setPlayingId={setPlayingId} favorites={favorites} updateFavoritesInDB={updateFavoritesInDB} />
@@ -199,7 +221,9 @@ export default function App() {
 				userName={userName}
 				onClickLoginBtn={onClickLoginBtn}
 				onClickFavoritListBtn={onClickFavoritListBtn}
-				onClickExitUser={onClickExitUser} />
+				onClickExitUser={onClickExitUser}
+				userDetailsIsActive={userDetailsIsActive}
+				setUserDetailsIsActive={setUserDetailsIsActive} />
 			<LoginModal title={loginTitle}
 				modalRef={loginModalRef}
 				regModalRef={regModalRef}
@@ -210,3 +234,4 @@ export default function App() {
 		</>
 	)
 }
+
