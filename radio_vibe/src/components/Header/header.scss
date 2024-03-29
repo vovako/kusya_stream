@@ -13,7 +13,7 @@
 		}
 	}
 
-	.user-details {
+	&__user-details {
 		display: none;
 		@media (min-width: $desktop + px) {
 			display: block;

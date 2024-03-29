@@ -188,7 +188,7 @@ export default function App() {
 					isFavorite={favorites.includes(playingId)}
 					volume={volume}
 					onClickToggleFavorite={() => updateFavoritesInDB(playingId)} />
-				<div className="user-details">
+				<div className="header__user-details">
 					<UserDetails userName={userName}
 						onClickExit={onClickExitUser}
 						onClickUserDetails={() => setUserDetailsIsActive(false)}
